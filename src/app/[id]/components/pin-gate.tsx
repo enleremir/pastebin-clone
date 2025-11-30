@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { KeyIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -60,7 +59,10 @@ export default function PinGate({ id }: PinGateProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmitWithAction} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmitWithAction}
+        className="flex h-full w-full flex-col gap-4 lg:max-w-[460px]"
+      >
         <FormField
           control={form.control}
           name="id"
@@ -94,7 +96,7 @@ export default function PinGate({ id }: PinGateProps) {
         />
         <div className="grid grid-cols-2 gap-4">
           <Button type="submit" disabled={action.isPending}>
-            {action.isPending ? <Spinner className="size-4" /> : <KeyIcon className="size-4" />}
+            {action.isPending && <Spinner className="size-4" />}
             Submit
           </Button>
           <Button

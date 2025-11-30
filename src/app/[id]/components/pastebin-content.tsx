@@ -53,14 +53,14 @@ export default function PastebinContent({ paste }: PastebinContentProps) {
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex h-full w-full flex-col gap-4 lg:max-w-[460px]">
       <h1 className="text-2xl font-bold">Paste {paste.id}</h1>
       <span className="text-muted-foreground text-sm">
         <ExpirationLabel expiresAt={paste.expiresAt} oneTime={paste.oneTime} />
       </span>
       <div className="relative">
-        <ScrollArea className="bg-muted h-80 rounded-md border p-2">
-          <pre className="text-muted-foreground text-sm leading-relaxed whitespace-break-spaces">
+        <ScrollArea className="bg-muted lg:[216px] h-[223px] border p-2">
+          <pre className="text-muted-foreground font-mono whitespace-break-spaces">
             {paste.content}
           </pre>
         </ScrollArea>

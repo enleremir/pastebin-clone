@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
-import { CheckIcon, CopyIcon, FilePenIcon, LockIcon } from "lucide-react";
+import { CheckIcon, CopyIcon } from "lucide-react";
 import { toast } from "sonner";
 
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
@@ -41,7 +41,7 @@ export default function PastebinForm() {
   const [pasteUrl, setPasteUrl] = useState<string | null>(null);
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  const { form, action, handleSubmitWithAction, resetFormAndAction } = useHookFormAction(
+  const { form, action, handleSubmitWithAction } = useHookFormAction(
     createPastebin,
     zodResolver(createPastebinSchema),
     {
@@ -88,7 +88,7 @@ export default function PastebinForm() {
   const isPinEnabled = form.watch("pinEnabled");
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex h-full w-full flex-col gap-4 lg:max-w-[460px]">
       <Form {...form}>
         <form onSubmit={handleSubmitWithAction} className="flex flex-col gap-4">
           <FormField
@@ -96,27 +96,30 @@ export default function PastebinForm() {
             name="content"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="h-5 font-light">Content</FormLabel>
+                <FormLabel className="title-10">Paste the content here</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="bg-muted h-80 resize-none" />
+                  <Textarea {...field} className="bg-muted lg:[216px] h-[223px] resize-none" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 items-start gap-4">
+          <div className="grid items-start gap-4 lg:grid-cols-2">
             <FormField
               control={form.control}
               name="expiration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="h-5 font-light">Expiration</FormLabel>
+                  <FormLabel className="title-10 h-5">Expiration</FormLabel>
                   <FormControl>
                     <Select {...field} onValueChange={field.onChange}>
-                      <SelectTrigger className="bg-muted w-full" aria-label="Expiration">
+                      <SelectTrigger
+                        className="caption-30 placeholder:text-secondary bg-muted w-full"
+                        aria-label="Expiration"
+                      >
                         <SelectValue placeholder="Never" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="caption-30">
                         <SelectItem value="never">Never</SelectItem>
                         <SelectItem value="once">One-time view</SelectItem>
                         <SelectItem value="1m">1 Minute</SelectItem>
@@ -141,7 +144,7 @@ export default function PastebinForm() {
               render={({ field }) => (
                 <FormItem>
                   <div className="flex h-5 items-center justify-between">
-                    <FormLabel className="font-light">PIN</FormLabel>
+                    <FormLabel className="title-10 h-5">PIN</FormLabel>
                     <Switch
                       checked={isPinEnabled}
                       onCheckedChange={(checked) => {
@@ -155,13 +158,12 @@ export default function PastebinForm() {
                   </div>
                   <FormControl className="relative">
                     <div>
-                      <LockIcon className="text-muted-foreground absolute top-1/2 left-3 hidden size-4 -translate-y-1/2 md:inline-block" />
                       <Input
                         {...field}
                         value={typeof field.value === "string" ? field.value : ""}
                         disabled={!isPinEnabled}
                         type="password"
-                        className="bg-muted md:pl-9"
+                        className="caption-30"
                         placeholder="Enter PIN"
                       />
                     </div>
@@ -171,24 +173,10 @@ export default function PastebinForm() {
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            <Button type="submit" disabled={action.isPending}>
-              {action.isPending ? (
-                <Spinner className="size-4" />
-              ) : (
-                <FilePenIcon className="size-4" />
-              )}
-              Create paste
-            </Button>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => resetFormAndAction()}
-              disabled={action.isPending}
-            >
-              Clear
-            </Button>
-          </div>
+          <Button type="submit" disabled={action.isPending}>
+            {action.isPending && <Spinner className="size-4" />}
+            Create paste
+          </Button>
         </form>
       </Form>
       {pasteUrl && (

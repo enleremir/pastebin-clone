@@ -1,10 +1,12 @@
 import { cookies } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/db/drizzle";
 import { pastes } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 
 import { decryptCookie, safeEq } from "@/lib/secure-cookie";
+import { Button } from "@/components/ui/button";
 
 import PastebinContent from "./components/pastebin-content";
 import PinGate from "./components/pin-gate";
@@ -53,12 +55,18 @@ export default async function PastebinPage(props: PastebinPageProps) {
 
   if (!unlocked) {
     return (
-      <div className="flex flex-col gap-8 text-pretty">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-bold">Protected Paste</h1>
-          <PinGate id={id} />
+      <section className="flex flex-1 flex-col items-center justify-center gap-10 px-4 py-6">
+        <div className="flex flex-col items-center gap-4">
+          <Button asChild variant="secondary" className="w-min">
+            <Link href="/">Go Back</Link>
+          </Button>
+          <h2 className="title-30">PasteBin</h2>
+          <p className="title-20 text-center text-[2.25rem]">
+            Share code and text snippets instantly!
+          </p>
         </div>
-      </div>
+        <PinGate id={id} />
+      </section>
     );
   }
 
@@ -69,8 +77,17 @@ export default async function PastebinPage(props: PastebinPageProps) {
   const { pinHash, ...safePaste } = paste;
 
   return (
-    <div className="flex flex-col gap-8 text-pretty">
+    <section className="flex flex-1 flex-col items-center justify-center gap-10 px-4 py-6">
+      <div className="flex flex-col items-center gap-4">
+        <Button asChild variant="secondary" className="w-min">
+          <Link href="/">Go Back</Link>
+        </Button>
+        <h2 className="title-30">PasteBin</h2>
+        <p className="title-20 text-center text-[2.25rem]">
+          Share code and text snippets instantly!
+        </p>
+      </div>
       <PastebinContent paste={{ ...safePaste, protected: pinHash !== null }} />
-    </div>
+    </section>
   );
 }
