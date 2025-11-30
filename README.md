@@ -2,6 +2,8 @@
 
 This project is built with **Next.js 15** using the App Router and was bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+![pastebin-demo](https://github.com/user-attachments/assets/50f11735-8374-4b2a-a946-15db6cf51fcd)
+
 ## ⚡ Getting Started
 
 Install dependencies:
